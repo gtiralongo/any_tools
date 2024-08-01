@@ -49,8 +49,8 @@ def admin_page():
     with tab1:
         st.write("Aysa")
         if st.button("Consultar Estado de Cuenta Aysa"):
-            username = st.secrets["account"]["username"]
-            password = st.secrets["account"]["password"]
+            username = st.secrets["account"]["useraysa"]
+            password = st.secrets["account"]["passaysa"]
             estado_cuenta = obtener_estado_cuenta(username, password)
             st.write(estado_cuenta)
     
