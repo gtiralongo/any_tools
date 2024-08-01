@@ -1,5 +1,5 @@
 import streamlit as st
-from playwright.sync_api import sync_playwright
+from requests_html import HTMLSession
 
 # Simulación de credenciales para el ejemplo
 credentials = st.secrets["auth"]
@@ -8,20 +8,27 @@ credentials = st.secrets["auth"]
 if 'authenticated' not in st.session_state:
     st.session_state.authenticated = False
 
-# Función para obtener el estado de cuenta utilizando Playwright
+# Función para obtener el estado de cuenta utilizando requests-html
 def obtener_estado_cuenta(username, password):
     try:
-        with sync_playwright() as p:
-            browser = p.chromium.launch(headless=True)
-            page = browser.new_page()
-            page.goto("https://acceso.web.aysa.com.ar/saml2/idp/sso/acceso.web.aysa.com.ar")
-            page.fill('#username_field_id', username)  # Ajustar ID según el campo real
-            page.fill('#password_field_id', password)  # Ajustar ID según el campo real
-            page.click('button[type="submit"]')
-            page.wait_for_load_state('networkidle')  # Esperar a que la página se cargue completamente
-            estado_cuenta = page.inner_text('#elemento_estado_cuenta')  # Ajustar selector según sea necesario
-            browser.close()
-            return estado_cuenta
+        session = HTMLSession()
+        login_url = "https://acceso.web.aysa.com.ar/saml2/idp/sso/acceso.web.aysa.com.ar"
+        login_data = {
+            'username': username,
+            'password': password
+        }
+        
+        response = session.post(login_url, data=login_data)
+        
+        if response.status_code == 200:
+            # Ajustar selector según el contenido real de la página
+            estado_cuenta = response.html.find('#elemento_estado_cuenta', first=True)
+            if estado_cuenta:
+                return estado_cuenta.text
+            else:
+                return "No se pudo obtener el estado de la cuenta."
+        else:
+            return f"Error al intentar iniciar sesión. Código de estado: {response.status_code}"
     except Exception as e:
         return f"Error al obtener el estado de la cuenta: {e}"
 
@@ -49,6 +56,7 @@ def admin_page():
     with tab1:
         st.write("Aysa")
         if st.button("Consultar Estado de Cuenta Aysa"):
+            # Usar las credenciales de la cuenta para iniciar sesión y obtener datos
             username = st.secrets["account"]["useraysa"]
             password = st.secrets["account"]["passaysa"]
             estado_cuenta = obtener_estado_cuenta(username, password)
