@@ -26,11 +26,17 @@ def admin_page():
     st.write("¡Bienvenido, administrador!")
     
     # Ejemplo de opciones en el panel de administración
-    if st.button("Opción 1"):
-        st.write("Funcionalidad de la opción 1")
+
+    tab1, tab2, tab3 = st.tabs(["Aysa", "Metrogas", "Edenor"])
+
+    with tab1:
+        st.write("Aysa")
     
-    if st.button("Opción 2"):
-        st.write("Funcionalidad de la opción 2")
+    with tab2:
+        st.write("Metrogas")
+
+    with tab3:
+        st.write("Edenor")
     
     if st.button("Cerrar Sesión"):
         st.session_state.authenticated = False
