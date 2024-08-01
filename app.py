@@ -1,6 +1,6 @@
 import streamlit as st
 
-# Simular credenciales para el ejemplo
+# Simulación de credenciales para el ejemplo
 credentials = st.secrets["auth"]
 
 # Gestión de estado de la aplicación
@@ -17,7 +17,6 @@ def login_page():
     if login_button:
         if username in credentials and credentials[username] == password:
             st.session_state.authenticated = True
-            st.experimental_set_query_params(authenticated=True)
         else:
             st.error("Usuario o contraseña incorrectos")
 
@@ -35,9 +34,8 @@ def admin_page():
     
     if st.button("Cerrar Sesión"):
         st.session_state.authenticated = False
-        st.experimental_set_query_params(authenticated=False)
 
-# Mostrar la página de inicio de sesión o el panel de administración
+# Mostrar la página de inicio de sesión o el panel de administración según el estado de autenticación
 if st.session_state.authenticated:
     admin_page()
 else:
