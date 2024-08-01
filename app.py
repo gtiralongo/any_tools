@@ -17,7 +17,7 @@ def login_page():
     if login_button:
         if username in credentials and credentials[username] == password:
             st.session_state.authenticated = True
-            st.experimental_rerun()
+            st.experimental_set_query_params(authenticated=True)
         else:
             st.error("Usuario o contraseña incorrectos")
 
@@ -35,7 +35,7 @@ def admin_page():
     
     if st.button("Cerrar Sesión"):
         st.session_state.authenticated = False
-        st.experimental_rerun()
+        st.experimental_set_query_params(authenticated=False)
 
 # Mostrar la página de inicio de sesión o el panel de administración
 if st.session_state.authenticated:
