@@ -1,4 +1,4 @@
 streamlit
 requests
-requests-html
-lxml
+mechanize
+BeautifulSoup
