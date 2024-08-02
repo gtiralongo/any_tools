@@ -1,2 +1,4 @@
 streamlit
 requests
+webdriver_manager
+selenium
