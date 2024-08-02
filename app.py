@@ -26,6 +26,7 @@ def admin_page():
     st.write("¡Bienvenido, administrador!")
     
     # Ejemplo de opciones en el panel de administración
+
     tab1, tab2, tab3 = st.tabs(["Aysa", "Metrogas", "Edenor"])
 
     with tab1:
